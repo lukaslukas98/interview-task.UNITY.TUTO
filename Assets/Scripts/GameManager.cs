@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     //Path to data file, alternatively it could be a TextAsset set in inspector
     public string fileName = "Assets/Data/level_data.json";
+
     //Variable holding all level data
     public Levels levelsContainer;
 
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     //Set in inspector as component of "Game State Manager" prefab
     public GameObject gemPrefab;
+
     //Initialized during runtime
     public Transform gemParent;
 
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
     //Initializes game state
     public void InitializeGame(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name == "Game")
+        if (scene.name == "Game")
         {
             //Reset game variables
             lastClickedGem = null;

@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 //Individual gem class responsible for gem click functionality
@@ -15,6 +10,7 @@ public class Gem : MonoBehaviour
 
     //Number text component used to change number text to gems number
     public TextMeshProUGUI numberText;
+
     //Number text animator component used to trigger number fade-out after click
     public Animator numberAnimator;
 
@@ -27,10 +23,8 @@ public class Gem : MonoBehaviour
     //Button component responsible for click action, initialized during runtime
     public Button button;
 
-
     public void Start()
     {
-
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         //As all gems are stored under an empty GameObject, their sibling index correlates to gem number

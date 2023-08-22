@@ -18,7 +18,7 @@ public class UIController : MonoBehaviour
     //On Menu scene load checks which levels have been completed, makes following one buttons interactable
     private void Start()
     {
-        if(SceneManager.GetActiveScene().name == "Menu")
+        if (SceneManager.GetActiveScene().name == "Menu")
         {
             UpdateButtons();
         }
@@ -66,7 +66,7 @@ public class UIController : MonoBehaviour
     public void ShowLevelCompletedCanvas()
     {
         //Update level completed text to reflect current level
-        levelCompletedText.text = "Level " + (GameManager.GM.currentLevel+1) + " completed!";
+        levelCompletedText.text = "Level " + (GameManager.GM.currentLevel + 1) + " completed!";
         //Update level select buttons to be interactable based on levels completed
         UpdateButtons();
         //Enable canvas to be visible
