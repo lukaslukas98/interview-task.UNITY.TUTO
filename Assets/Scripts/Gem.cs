@@ -7,109 +7,81 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[System.Serializable]
+//Individual gem class responsible for gem click functionality
 public class Gem : MonoBehaviour
 {
-    public bool clicked;
-    public TextMeshProUGUI numberText;
-    public Animator numberAnimator;
+    //This gems number displayed next to gem GameObject
     public int number;
-    public Sprite blueGem;
+
+    //Number text component used to change number text to gems number
+    public TextMeshProUGUI numberText;
+    //Number text animator component used to trigger number fade-out after click
+    public Animator numberAnimator;
+
+    //Component used to change gem visual after click
     public SpriteRenderer spriteRenderer;
+
+    //Sprite set in prefab through inspector of a blue gem
+    public Sprite blueGem;
+
+    //Button component responsible for click action, initialized during runtime
     public Button button;
-    public LineRenderer rope;
 
 
     public void Start()
     {
 
-
         spriteRenderer = GetComponent<SpriteRenderer>();
-        // number = ((i / 2) + 1);
-        //  SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
-        //  transform.GetChild(0).GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = ((i / 2) + 1).ToString(); ;
+        //As all gems are stored under an empty GameObject, their sibling index correlates to gem number
         number = transform.parent.GetSiblingIndex() + 1;
-        numberAnimator = transform.parent.GetChild(1).GetChild(0).GetComponentInChildren<Animator>();
-        numberText = transform.parent.GetChild(1).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
-        numberText.text = number.ToString();
 
+        //Retrieve gem number GameObject based on predetermined object hierarchy
+        GameObject numberTextGameObject = transform.parent.GetChild(1).GetChild(0).gameObject;
 
-        rope = transform.parent.GetChild(2).GetComponentInChildren<LineRenderer>();
+            numberAnimator = numberTextGameObject.GetComponentInChildren<Animator>();
 
+            numberText = numberTextGameObject.GetComponentInChildren<TextMeshProUGUI>();
+            numberText.text = number.ToString();
 
-        //button = GetComponent<Button>();
-        int num = number;
-        //button.onClick.AddListener(() => onclick(num));
-
+        //Initialize button component and add on click listener for OnClick method
         button = gameObject.AddComponent<Button>();
-        button.onClick.AddListener(onclick);
+        button.onClick.AddListener(OnClick);
     }
 
-
-    public void ChangeNumberText()
+    //Method is called when gem is clicked
+    public void OnClick()
     {
-    }
-
-
-    public void onclick()
-    {
-        //  numberAnimation.
-
-        // int tempNum = number;
-        // Debug.Log(tempNum);
-        // Debug.Log("3");
+        //If the first gem is clicked and no other gems were clicked before, set it to clicked
         if (number == 1 && GameManager.GM.lastClickedGem == null)
         {
-            numberAnimator.SetTrigger("Clicked");
-            spriteRenderer.sprite = blueGem;
-            GameManager.GM.lastClicked = number;
-            GameManager.GM.lastClickedGem = gameObject;
+            SetGemToClicked();
         }
+        //Check if clicked gem is one number higher than previous successful click
         else
-        if (number - 1 == GameManager.GM.lastClicked)
+        if (number == GameManager.GM.lastClickedGem.GetComponent<Gem>().number + 1)
         {
-            numberAnimator.SetTrigger("Clicked");
+            //Rope must be created before setting this gem as previously clicked
             GameManager.GM.ropeController.CreateRope(GameManager.GM.lastClickedGem.transform.position, transform.position);
-            spriteRenderer.sprite = blueGem;
-            GameManager.GM.lastClicked = number;
-            GameManager.GM.lastClickedGem = gameObject;
+            SetGemToClicked();
 
-            if(number == GameManager.GM.gems.Count)
+            //Check if this gem is the last in current level
+            if (number == GameManager.GM.gems.Count)
             {
+                //Draw additional rope from last to first gem
                 GameManager.GM.ropeController.CreateRope(transform.position, GameManager.GM.gems[0].transform.position);
-                if (GameManager.GM.currentLevel < 3)
-                {
-                    GameManager.GM.levelsCompleted[GameManager.GM.currentLevel] = true;
-                }
             }
         }
-        
-
-
     }
 
-
-
-
-
-
-
-
-
-
-    //public void onclick(int previouseClicked)
-    //{
-    //    Debug.Log("triggered");
-    //    if (number == 1)
-    //    {
-    //        Debug.Log("1");
-    //        spriteRenderer.sprite = blueGem;
-    //    }
-    //    else if(previouseClicked+1 == number)
-    //    {
-    //        spriteRenderer.sprite = blueGem;
-    //    }
-
-    //}
+    //Method is triggered by successful gem click
+    //Runs number fade-out animation
+    //Changes gem sprite to blue
+    //Sets this gem as last one clicked successfully
+    private void SetGemToClicked()
+    {
+        numberAnimator.SetTrigger("Clicked");
+        spriteRenderer.sprite = blueGem;
+        GameManager.GM.lastClickedGem = gameObject;
+    }
 }

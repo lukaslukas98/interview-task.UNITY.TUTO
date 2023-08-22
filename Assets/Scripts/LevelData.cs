@@ -6,6 +6,4 @@ using UnityEngine;
 public class LevelData
 {
     public float[] level_data;
-
-    
 }
